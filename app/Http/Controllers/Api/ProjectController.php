@@ -9,26 +9,28 @@ use App\Models\Project;
 class ProjectController extends Controller
 {
     public function index(){
-        $projects = Project::all();
+        $projects = Project::with('type')->get();
         //dd($projects);
         return response()->json([
-            'success' => true,
+            'status' => 'success',
+            'message' => 'Ok',
             'results' => $projects
-        ]);
+        ],200);
     }
 
     public function show($slug){
         $project = Project::where('slug', $slug)->with('type', 'technologies')->first();
         if($project){
             return response()->json([
-                'success' => true,
+                'status' => 'success',
+                'message' => 'Ok',
                 'results' => $project
-            ]);
+            ],200);
         } else {
             return response()->json([
-                'success' => false,
-                'results' => 'post not found'
-            ]);
+                'status' => 'error',
+                'message' => 'Error'
+            ],404);
         }
     }
 }
