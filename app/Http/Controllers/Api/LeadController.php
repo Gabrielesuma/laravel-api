@@ -21,9 +21,9 @@ class LeadController extends Controller
 
         if($validator->fails()){
             return response()->json([
-                'success' => false,
+                'status' => 'error',
                 'errors' => $validator->errors()
-            ]);
+            ], 401);
         }
 
         $lead = new Lead();
@@ -31,5 +31,10 @@ class LeadController extends Controller
         $lead->save();
 
         Mail::to('info@boolfolio.com')->send(new NewContact($lead));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Ok'
+        ], 200);
     }
 }
